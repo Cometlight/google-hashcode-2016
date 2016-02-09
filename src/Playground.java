@@ -38,7 +38,6 @@ public class Playground {
     
     public void start() {
     	_calculatedField = divide(_field, 0, 0);
-    	System.out.println("Count: " + count);
     }
     public int count = 0;
     Binary2dField divide(boolean[][] fieldArray, int topLeftX, int topLeftY) {
@@ -50,7 +49,6 @@ public class Playground {
     		 PriorityQueue<Move> defaultMove = new PriorityQueue<>();
     		 if (fieldArray[0][0] == true) {
     			 defaultMove.add(new PaintLine(topLeftY, topLeftX, topLeftY, topLeftX));
-    			 ++count;
     		 }
     		 newField.setMoves(defaultMove);
     		 newField.setTiles(fieldArray);
@@ -71,14 +69,14 @@ public class Playground {
     				fieldArrayHalf1[i][j] = fieldArray[i][j];
     			}
     		}
-    		for(int i = height - midwayPoint; i < height; ++i) {
+    		for(int i = midwayPoint; i < height; ++i) {
     			for(int j = 0; j < width; ++j) {
-    				fieldArrayHalf2[i - (height - midwayPoint)][j] = fieldArray[i][j];
+    				fieldArrayHalf2[i - midwayPoint][j] = fieldArray[i][j];
     			}
     		}
     		
     		field1 = divide(fieldArrayHalf1, topLeftX, topLeftY);
-    		field2 = divide(fieldArrayHalf2, topLeftX, topLeftY + (height - midwayPoint));
+    		field2 = divide(fieldArrayHalf2, topLeftX, topLeftY + midwayPoint);
     	} else {
     		direction = Direction.HORIZONTAL;
     		
@@ -92,13 +90,13 @@ public class Playground {
     			}
     		}
     		for(int i = 0; i < height; ++i) {
-    			for(int j = width - midwayPoint; j < width; ++j) {
-    				fieldArrayHalf2[i][j - (width - midwayPoint)] = fieldArray[i][j];
+    			for(int j = midwayPoint; j < width; ++j) {
+    				fieldArrayHalf2[i][j - midwayPoint] = fieldArray[i][j];
     			}
     		}
     		
     		field1 = divide(fieldArrayHalf1, topLeftX, topLeftY);
-    		field2 = divide(fieldArrayHalf2, topLeftX + (width - midwayPoint), topLeftY);
+    		field2 = divide(fieldArrayHalf2, topLeftX + midwayPoint, topLeftY);
     	}
     	
     	return merge(field1, field2, direction);

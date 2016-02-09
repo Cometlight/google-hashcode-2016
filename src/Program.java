@@ -11,7 +11,7 @@ public class Program {
     public static void main(String[] args) throws IOException {
 
         //get file
-        List<String> lines = Files.readAllLines(Paths.get("test.in"));
+        List<String> lines = Files.readAllLines(Paths.get("right_angle.in"));
         lines.remove(0); //not needed
 
 
