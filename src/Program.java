@@ -16,6 +16,8 @@ public class Program {
 
 
         boolean[][] field = linesToBooleanArray(lines);
+        Playground playground = new Playground();
+        playground.setField(field);
         //init playground
 
         //run
@@ -25,8 +27,18 @@ public class Program {
         boolean[][] array = new boolean[lines.size()][];
 
         for(int i = 0; i < lines.size(); ++i) {
-            array[i] = new boolean[lines.get(i).length()];
-            for()
+            char[] curLine = lines.get(i).toCharArray();
+            array[i] = new boolean[curLine.length];
+
+            for(int j = 0; j < curLine.length; j++){
+                if (curLine[j] == '#'){
+                    array[i][j] = true;
+                } else {
+                    array[i][j] = false;
+                }
+            }
         }
+
+        return array;
     }
 }
