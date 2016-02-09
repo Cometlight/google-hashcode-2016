@@ -6,6 +6,10 @@ public class Playground {
     private int _height;
     private boolean[][] _field;
 
+    static enum Direction {
+    	HORIZONTAL, VERTICAL;
+    }
+    
     /*
      *  CONSTRUCTOR
      */
@@ -27,6 +31,20 @@ public class Playground {
             fieldAsString.append("\n");
         }
         System.out.println(fieldAsString.toString());
+    }
+    
+    Binary2dField divide(boolean[][] fieldArray) {
+    	// if (fieldArray len == 1)
+    	// return new Binary2dField( value );
+    	
+    	int length = fieldArray.length;
+//    	int width = fieldArray[0].wid
+//    	if(fieldArray.)
+    	return null;
+    }
+    
+    Binary2dField merge(Binary2dField field1, Binary2dField field2, Direction direction) {
+    	return null;
     }
 
     /*
