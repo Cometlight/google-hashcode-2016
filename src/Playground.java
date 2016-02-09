@@ -35,13 +35,23 @@ public class Playground {
         System.out.println(fieldAsString.toString());
     }
     
-    Binary2dField divide(boolean[][] fieldArray) {
+    public void start() {
+    	divide(_field, 0, 0);
+    }
+    
+    Binary2dField divide(boolean[][] fieldArray, int topLeftX, int topLeftY) {
     	int height = fieldArray.length;
     	int width = fieldArray[0].length;
     	
     	 if (height == 1 && width == 1) {
-    		 return null;
-//    		 return new Binary2dField( value );
+    		 Binary2dField newField = new Binary2dField();
+    		 PriorityQueue<Move> defaultMove = new PriorityQueue<>();
+    		 if (fieldArray[0][0] == true) {
+    			 defaultMove.add(new PaintLine(topLeftX, topLeftY, topLeftX, topLeftY));
+    		 }
+    		 newField.setMoves(defaultMove);
+    		 newField.setTiles(fieldArray);
+    		 return newField;
     	 }
     	
     	Direction direction;
@@ -67,8 +77,8 @@ public class Playground {
     			}
     		}
     		
-    		field1 = divide(fieldArrayHalf1);
-    		field2 = divide(fieldArrayHalf2);
+    		field1 = divide(fieldArrayHalf1, topLeftX, topLeftY);
+    		field2 = divide(fieldArrayHalf2, topLeftX, topLeftY + (height - midwayPoint));
     	} else {
     		direction = Direction.HORIZONTAL;
     		
@@ -87,8 +97,8 @@ public class Playground {
     			}
     		}
     		
-    		field1 = divide(fieldArrayHalf1);
-    		field2 = divide(fieldArrayHalf2);
+    		field1 = divide(fieldArrayHalf1, topLeftX, topLeftY);
+    		field2 = divide(fieldArrayHalf2, topLeftX + (width - midwayPoint), topLeftY);
     	}
     	
     	return merge(field1, field2, direction);
