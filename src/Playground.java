@@ -1,3 +1,5 @@
+import java.util.PriorityQueue;
+
 /**
  * Created by Zopo on 09.02.2016.
  */
@@ -93,7 +95,61 @@ public class Playground {
     }
     
     Binary2dField merge(Binary2dField field1, Binary2dField field2, Direction direction) {
-    	return null;
+        Binary2dField newField = new Binary2dField();
+        boolean[][] mergedTiles = {};
+
+        //Append tiles
+        switch (direction){
+            case HORIZONTAL:
+                //initialize new Tileset with new size
+                mergedTiles = new boolean[field1.getTiles().length][field1.getTiles()[0].length + field2.getTiles()[0].length];
+
+                //fill the new Tileset
+                for (int i = 0; i < field1.getTiles().length; i++){
+                    //Copy field1 tiles into new Tileset
+                    for (int j = 0; j < field1.getTiles()[i].length; j++){
+                        mergedTiles[i][j] = field1.getTiles()[i][j];
+                    }
+
+                    //Copy field2 tiles into new Tileset
+                    for (int j = 0; j < field2.getTiles()[i].length; j++){
+                        mergedTiles[i][j + field1.getTiles()[i].length] = field2.getTiles()[i][j];
+                    }
+                }
+                break;
+
+            case VERTICAL:
+                //initialize new Tileset with new size
+                mergedTiles = new boolean[field1.getTiles().length + field2.getTiles().length][field1.getTiles()[0].length];
+
+                //fill the new Tileset
+                //Copy field1 tiles into new Tileset
+                for (int i = 0; i < field1.getTiles().length; i++){
+                    for (int j = 0; j < field1.getTiles()[i].length; j++){
+                        mergedTiles[i][j] = field1.getTiles()[i][j];
+                    }
+                }
+
+                //Copy field2 tiles into new Tileset
+                for (int i = 0; i < field2.getTiles().length; i++){
+                    for (int j = 0; j < field1.getTiles()[i].length; j++){
+                        mergedTiles[i + field1.getTiles().length][j] = field2.getTiles()[i][j];
+                    }
+                }
+                break;
+        }
+        newField.setTiles(mergedTiles);
+
+        //Append moves
+        PriorityQueue<Move> mergedMoves = new PriorityQueue<>();
+        mergedMoves.addAll(field1.getMoves());
+        mergedMoves.addAll(field2.getMoves());
+        newField.setMoves(mergedMoves);
+
+        //optimize moves
+        newField.optimizeMoves();
+
+    	return newField;
     }
 
     /*
