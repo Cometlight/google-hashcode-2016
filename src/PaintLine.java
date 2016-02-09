@@ -7,7 +7,7 @@ public class PaintLine extends Move{
 	public int C2;
 	public int R2;
 	
-	public PaintLine(int C1, int R1, int C2, int R2) {
+	public PaintLine(int R1, int C1, int R2, int C2) {
 		super(1);
 		this.C1 = C1;
 		this.R1 = R1;

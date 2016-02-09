@@ -1,7 +1,7 @@
 /**
  * Created by Zopo on 09.02.2016.
  */
-public abstract class Move {
+public abstract class Move implements Comparable<Move> {
 	
 	private int _priority;
 	
@@ -16,4 +16,9 @@ public abstract class Move {
 	public int getPriority() {
 		return _priority;
 	}	
+	
+	@Override
+	public int compareTo(Move o) {
+		return _priority - o._priority;
+	}
 }

@@ -4,7 +4,7 @@ public class EraseCellMove extends Move{
 	public int C;
 	public int R;
 	
-	public EraseCellMove(int C, int R) {
+	public EraseCellMove(int R, int C) {
 		super(0);
 		this.C = C;
 		this.R = R;

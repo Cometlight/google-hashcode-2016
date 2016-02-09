@@ -11,7 +11,7 @@ public class Program {
     public static void main(String[] args) throws IOException {
 
         //get file
-        List<String> lines = Files.readAllLines(Paths.get("logo.in"));
+        List<String> lines = Files.readAllLines(Paths.get("test.in"));
         lines.remove(0); //not needed
 
 
@@ -19,8 +19,9 @@ public class Program {
         Playground playground = new Playground();
         playground.setField(field);
         //init playground
-
+        playground.start();
         //run
+        PrintMovesUtil.printToScreen(playground.getCalculatedField().getMoves());
         }
 
     private static boolean[][] linesToBooleanArray(List<String> lines) {

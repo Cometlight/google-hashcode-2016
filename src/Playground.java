@@ -7,6 +7,7 @@ public class Playground {
     private int _width;
     private int _height;
     private boolean[][] _field;
+    private Binary2dField _calculatedField;
 
     static enum Direction {
     	HORIZONTAL, VERTICAL;
@@ -36,9 +37,10 @@ public class Playground {
     }
     
     public void start() {
-    	divide(_field, 0, 0);
+    	_calculatedField = divide(_field, 0, 0);
+    	System.out.println("Count: " + count);
     }
-    
+    public int count = 0;
     Binary2dField divide(boolean[][] fieldArray, int topLeftX, int topLeftY) {
     	int height = fieldArray.length;
     	int width = fieldArray[0].length;
@@ -47,7 +49,8 @@ public class Playground {
     		 Binary2dField newField = new Binary2dField();
     		 PriorityQueue<Move> defaultMove = new PriorityQueue<>();
     		 if (fieldArray[0][0] == true) {
-    			 defaultMove.add(new PaintLine(topLeftX, topLeftY, topLeftX, topLeftY));
+    			 defaultMove.add(new PaintLine(topLeftY, topLeftX, topLeftY, topLeftX));
+    			 ++count;
     		 }
     		 newField.setMoves(defaultMove);
     		 newField.setTiles(fieldArray);
@@ -58,14 +61,11 @@ public class Playground {
     	Binary2dField field1, field2;
 		if(height > width) {
     		direction = Direction.VERTICAL;
-//    		int arrSize = height * width;
     		int midwayPoint = height/2;
     		boolean[][] fieldArrayHalf1 = new boolean[midwayPoint][width];
     		boolean[][] fieldArrayHalf2 = new boolean[height - midwayPoint][width];
     		
     		
-//    		System.arraycopy(fieldArray, 0, fieldArrayHalf1, 0, arrSize/2);
-//    		System.arraycopy(fieldArray, arrSize/2, fieldArrayHalf2, 0, arrSize - arrSize/2);
     		for(int i = 0; i < midwayPoint; ++i) {
     			for(int j = 0; j < width; ++j) {
     				fieldArrayHalf1[i][j] = fieldArray[i][j];
@@ -79,8 +79,6 @@ public class Playground {
     		
     		field1 = divide(fieldArrayHalf1, topLeftX, topLeftY);
     		field2 = divide(fieldArrayHalf2, topLeftX, topLeftY + (height - midwayPoint));
-    		if (field1.getTiles().length * field1.getTiles()[0].length != field2.getTiles().length * field2.getTiles()[0].length)
-    			System.out.println("stop");
     	} else {
     		direction = Direction.HORIZONTAL;
     		
@@ -101,8 +99,6 @@ public class Playground {
     		
     		field1 = divide(fieldArrayHalf1, topLeftX, topLeftY);
     		field2 = divide(fieldArrayHalf2, topLeftX + (width - midwayPoint), topLeftY);
-    		if (field1.getTiles().length * field1.getTiles()[0].length != field2.getTiles().length * field2.getTiles()[0].length)
-    			System.out.println("stop");
     	}
     	
     	return merge(field1, field2, direction);
@@ -196,5 +192,9 @@ public class Playground {
 
     public void setField(boolean[][] field) {
         _field = field;
+    }
+    
+    public Binary2dField getCalculatedField() {
+    	return _calculatedField;
     }
 }
