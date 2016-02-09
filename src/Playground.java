@@ -79,6 +79,8 @@ public class Playground {
     		
     		field1 = divide(fieldArrayHalf1, topLeftX, topLeftY);
     		field2 = divide(fieldArrayHalf2, topLeftX, topLeftY + (height - midwayPoint));
+    		if (field1.getTiles().length * field1.getTiles()[0].length != field2.getTiles().length * field2.getTiles()[0].length)
+    			System.out.println("stop");
     	} else {
     		direction = Direction.HORIZONTAL;
     		
@@ -99,6 +101,8 @@ public class Playground {
     		
     		field1 = divide(fieldArrayHalf1, topLeftX, topLeftY);
     		field2 = divide(fieldArrayHalf2, topLeftX + (width - midwayPoint), topLeftY);
+    		if (field1.getTiles().length * field1.getTiles()[0].length != field2.getTiles().length * field2.getTiles()[0].length)
+    			System.out.println("stop");
     	}
     	
     	return merge(field1, field2, direction);
@@ -141,10 +145,15 @@ public class Playground {
                 }
 
                 //Copy field2 tiles into new Tileset
-                for (int i = 0; i < field2.getTiles().length; i++){
-                    for (int j = 0; j < field1.getTiles()[i].length; j++){
-                        mergedTiles[i + field1.getTiles().length][j] = field2.getTiles()[i][j];
-                    }
+//                for (int i = 0; i < field2.getTiles().length; i++){
+//                    for (int j = 0; j < field1.getTiles()[i].length; j++){
+//                        mergedTiles[i + field1.getTiles().length][j] = field2.getTiles()[i][j];
+//                    }
+//                }
+                for (int i = field1.getTiles().length; i < field1.getTiles().length + field2.getTiles().length; ++i) {
+                	for (int j = 0; j < field2.getTiles()[i - field1.getTiles().length].length; ++j) {
+                		mergedTiles[i][j] = field2.getTiles()[i - field1.getTiles().length][j];
+                	}
                 }
                 break;
         }
