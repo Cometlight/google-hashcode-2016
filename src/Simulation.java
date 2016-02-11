@@ -12,7 +12,7 @@ public class Simulation {
     List<Drone> _drones;
     int _droneCapacity;
     List<Order> _orders;
-    PriorityQueue<Delivery> _deliveries;
+    PriorityQueue<Delivery> _deliveries = new PriorityQueue<>();
     int DELIVERY_LOOKUP_COUNT = 32;
     List<Warehouse> _warehouses;
     List<ProductType> _products;
