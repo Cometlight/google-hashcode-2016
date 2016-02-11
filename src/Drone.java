@@ -53,7 +53,7 @@ public class Drone {
         if (!_curLocation.equals(curDelivery._assignedWarehouse._location)) {
         	// We just loaded the stuff needed for the current delivery, but let's see if we have some space left
         	while (getCurrentWeight() < _maxWeight) {
-        		Delivery newDelivery = Simulation.getInstance().getNextDelivery(this);
+        		Delivery newDelivery = Simulation.getInstance().getNextDeliveryFromWarehouse(this, curDelivery._assignedWarehouse);
         		if (newDelivery == null) {
         			// no applicable delivery exists anymore at the moment
         			break;
