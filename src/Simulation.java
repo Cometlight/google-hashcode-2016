@@ -11,8 +11,9 @@ public class Simulation {
     List<Warehouse> _warehouses;
     List<ProductType> _products;
     WarehouseManager _warehouseManager;
+    int _nrOfDroneCommands = 0;
 
-    int _curTime;
+    int _curTime = 1;
     int _maxTime;
 
     int _width;
@@ -20,15 +21,22 @@ public class Simulation {
 
     int _commandCount;
 
-    public void performTimestep(){
-
-    }
-
-    public Delivery getNextDelivery(Coordinate curLocation){
-        return null; //todo
+    public void performTimestep() {
+    	for(Drone drone : _drones) {
+    		drone.performTimestep();
+    	}
     }
 
     public void run(){
-
+    	if (_curTime <= _maxTime) {
+	    	performTimestep();
+    	} else {
+    		// time is up, the simulation has finished
+    		System.out.println("Nr. of commands: " + _nrOfDroneCommands);
+    	}
+    }
+    
+	public Delivery getNextDelivery(Coordinate curLocation){
+        return null; //todo
     }
 }
