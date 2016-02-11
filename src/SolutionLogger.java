@@ -64,6 +64,7 @@ public class SolutionLogger {
                 ProductType product = sim._products.get(j);
                 warehouse._stock.put(product, Integer.parseInt(stockLine[j]));
             }
+            sim._warehouses.add(warehouse);
         }
 
         //Line X - Delivery Count
@@ -92,6 +93,17 @@ public class SolutionLogger {
             Order order = new Order(orderProducts);
             order._destination = orderDestination;
             sim._orders.add(order);
+        }
+
+        sim._drones = new LinkedList<>();
+        Coordinate initialWarehousePosition = sim._warehouses.get(0)._location;
+        for (int i = 0; i < droneCount; i++){
+            Drone d = new Drone();
+            d._maxWeight = droneCapacity;
+            d._remainingBusyTime = 0;
+            d._simulation = sim;
+            d._curLocation = new Coordinate(initialWarehousePosition._row, initialWarehousePosition._column);
+            sim._drones.add(d);
         }
 
         return sim;
