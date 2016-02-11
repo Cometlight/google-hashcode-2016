@@ -92,6 +92,7 @@ public class SolutionLogger {
                 }
             }
             Order order = new Order(orderProducts);
+            order._id = i;
             order._destination = orderDestination;
             sim._orders.add(order);
         }

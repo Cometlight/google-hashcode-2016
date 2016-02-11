@@ -87,7 +87,16 @@ public class Simulation {
         //Remove delivery from list of available deliveries
         _deliveries.remove(shortestDelivery);
 
-        return shortestDelivery; //todo
+        //Refresh order status
+        Order order = shortestDelivery._order;
+        order._deliveries.remove(shortestDelivery);
+        if (order._deliveries.isEmpty()){
+            order._status = Order.OrderStatus.DONE;
+        } else {
+            order._status = Order.OrderStatus.IN_PROGRESS;
+        }
+
+        return shortestDelivery;
     }
 
     public static Simulation getInstance(){

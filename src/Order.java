@@ -7,6 +7,7 @@ import java.util.Map.Entry;
  * Created by Zopo on 11.02.2016.
  */
 public class Order {
+    int _id;
     Coordinate _destination;
     OrderStatus _status = OrderStatus.OPEN;
     List<Delivery> _deliveries = new LinkedList<>();	// can contain multiple same deliveries, indicating how many of them are needed
