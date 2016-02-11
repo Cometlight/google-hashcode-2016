@@ -99,6 +99,7 @@ public class SolutionLogger {
         Coordinate initialWarehousePosition = sim._warehouses.get(0)._location;
         for (int i = 0; i < droneCount; i++){
             Drone d = new Drone();
+            d._id = i;
             d._maxWeight = droneCapacity;
             d._remainingBusyTime = 0;
             d._simulation = sim;

@@ -12,6 +12,7 @@ public class Simulation {
     int _droneCapacity;
     List<Order> _orders;
     PriorityQueue<Delivery> _deliveries;
+    int DELIVERY_LOOKUP_COUNT = 32;
     List<Warehouse> _warehouses;
     List<ProductType> _products;
     WarehouseManager _warehouseManager;
@@ -41,6 +42,13 @@ public class Simulation {
     }
     
 	public Delivery getNextDelivery(Coordinate curLocation){
+        int deliveryCount = Math.min(DELIVERY_LOOKUP_COUNT, _deliveries.size());
+
+        for (int i = 0; i < deliveryCount; i++){
+
+        }
+        int distanceToClosestWarehouse;
+        int distanceToDestination;
         return null; //todo
     }
 
