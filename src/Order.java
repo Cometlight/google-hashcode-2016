@@ -38,6 +38,14 @@ public class Order {
     	}
     }
 
+	public int getWeight(){
+		int weight = 0;
+		for (Delivery d : _deliveries){
+			weight += d.getWeight();
+		}
+		return weight;
+	}
+
     public enum OrderStatus{
         DONE, IN_PROGRESS, OPEN;
     }
