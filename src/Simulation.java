@@ -46,9 +46,9 @@ public class Simulation {
         int deliveryCount = Math.min(DELIVERY_LOOKUP_COUNT, _deliveries.size());
 
         //choose the shortest delivery
-        Delivery shortestDelivery;
+        Delivery shortestDelivery = null;
         int shortestDeliveryDistance = Integer.MAX_VALUE;
-        Warehouse shortestDeliveryWarehouse; //The products need to be reservered here
+        Warehouse shortestDeliveryWarehouse = null; //The products need to be reservered here
         Iterator deliveryIterator = _deliveries.iterator();
         for (int i = 0; i < deliveryCount; i++){
             //get the next delivery to check
@@ -72,10 +72,22 @@ public class Simulation {
             }
         }
 
+        //Abort when there are no deliveries found
+        if (shortestDelivery == null){
+            return null;
+        }
+
+        //Put closest warehouse to the delivery
+        shortestDelivery._assignedWarehouse = shortestDeliveryWarehouse;
+
         //Reserve the products in the warehouse
+        int oldStock = shortestDeliveryWarehouse._stock.get(shortestDelivery._product);
+        shortestDeliveryWarehouse._stock.put(shortestDelivery._product, oldStock - shortestDelivery._amount);
 
+        //Remove delivery from list of available deliveries
+        _deliveries.remove(shortestDelivery);
 
-        return null; //todo
+        return shortestDelivery; //todo
     }
 
     public static Simulation getInstance(){

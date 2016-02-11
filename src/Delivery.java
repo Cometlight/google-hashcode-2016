@@ -5,6 +5,7 @@ public class Delivery {
     Order _order;
     ProductType _product;
     int _amount;
+    Warehouse _assignedWarehouse;
     boolean _isDone = false;
     
     public Delivery(Order order, ProductType product, int amount) {
