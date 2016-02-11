@@ -1,3 +1,4 @@
+import java.util.Iterator;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
@@ -44,11 +45,36 @@ public class Simulation {
 	public Delivery getNextDelivery(Coordinate curLocation){
         int deliveryCount = Math.min(DELIVERY_LOOKUP_COUNT, _deliveries.size());
 
+        //choose the shortest delivery
+        Delivery shortestDelivery;
+        int shortestDeliveryDistance = Integer.MAX_VALUE;
+        Warehouse shortestDeliveryWarehouse; //The products need to be reservered here
+        Iterator deliveryIterator = _deliveries.iterator();
         for (int i = 0; i < deliveryCount; i++){
+            //get the next delivery to check
+            Delivery checkedDelivery = (Delivery) deliveryIterator.next();
+            int totalDistance = 0;
 
+            //get the closest warehouse
+            Warehouse closestWarehouse = _warehouseManager.getClosestWarehouse(curLocation, checkedDelivery._product, checkedDelivery._amount);
+
+            //get the distance to the closest warehouse
+            totalDistance += Utils.getDistance(curLocation, closestWarehouse._location);
+
+            //get the distance from the warehouse to the destination
+            totalDistance += Utils.getDistance(closestWarehouse._location, checkedDelivery._order._destination);
+
+            //replace the current shortest delivery if the distance is shorter
+            if (totalDistance < shortestDeliveryDistance){
+                shortestDeliveryDistance = totalDistance;
+                shortestDelivery = checkedDelivery;
+                shortestDeliveryWarehouse = closestWarehouse;
+            }
         }
-        int distanceToClosestWarehouse;
-        int distanceToDestination;
+
+        //Reserve the products in the warehouse
+
+
         return null; //todo
     }
 

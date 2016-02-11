@@ -55,6 +55,7 @@ public class SolutionLogger {
         sim._warehouses = new LinkedList<>();
         for (int i = 0; i < warehouseCount; i++){
             Warehouse warehouse = new Warehouse();
+            warehouse._id = i;
             String[] locationLine = lines.remove(0).split(" ");
             warehouse._location = new Coordinate(Integer.parseInt(locationLine[0]), Integer.parseInt(locationLine[1]));
 
