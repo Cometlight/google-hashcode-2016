@@ -4,4 +4,9 @@
 public class Coordinate {
     int _row;
     int _column;
+
+    public Coordinate (int row, int column){
+        _row = row;
+        _column = column;
+    }
 }

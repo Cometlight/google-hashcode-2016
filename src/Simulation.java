@@ -1,5 +1,6 @@
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Set;
 
 /**
  * Created by Zopo on 11.02.2016.
@@ -9,7 +10,7 @@ public class Simulation {
     List<Order> _orders;
     PriorityQueue<Delivery> _deliveries;
     List<Warehouse> _warehouses;
-    List<ProductType> _products;
+    Set<ProductType> _products;
     WarehouseManager _warehouseManager;
     int _nrOfDroneCommands = 0;
 
