@@ -16,7 +16,7 @@ public class SolutionLogger {
 
     public static Simulation parseFile(File file) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get(file.toURI()));
-        Simulation sim = new Simulation();
+        Simulation sim = Simulation.getInstance();
 
         //First Line - General Info
         String[] firstLine = (lines.remove(0)).split(" ");
@@ -69,6 +69,22 @@ public class SolutionLogger {
         sim._orders = new LinkedList<>();
         for (int i = 0; i < deliveryCount; i++){
             String[] locationLine = lines.remove(0).split(" ");
+            Coordinate orderDestination = new Coordinate(Integer.parseInt(locationLine[0]), Integer.parseInt(locationLine[1]));
+
+            String itemCountLine = lines.remove(0);
+            int itemCount = Integer.parseInt(itemCountLine);
+
+            String[] itemLine = lines.remove(0).split(" ");
+            HashMap<ProductType, Integer> orderProducts = new HashMap<>();
+            for (int j = 0; j < itemCount; j++){
+                ProductType product = sim._products.get(Integer.parseInt(itemLine[j]));
+                if (orderProducts.containsKey(product)){
+                    orderProducts.put(product, orderProducts.get(product) + 1);
+                } else {
+                    orderProducts.put(product, 0);
+                }
+            }
+            sim._orders.add(new Order(orderProducts));
         }
 
         return sim;

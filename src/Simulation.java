@@ -6,6 +6,8 @@ import java.util.Set;
  * Created by Zopo on 11.02.2016.
  */
 public class Simulation {
+    static Simulation _instance;
+
     List<Drone> _drones;
     int _droneCapacity;
     List<Order> _orders;
@@ -40,5 +42,12 @@ public class Simulation {
     
 	public Delivery getNextDelivery(Coordinate curLocation){
         return null; //todo
+    }
+
+    public static Simulation getInstance(){
+        if (_instance == null){
+            _instance = new Simulation();
+        }
+        return _instance;
     }
 }
