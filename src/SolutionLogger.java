@@ -88,7 +88,7 @@ public class SolutionLogger {
                 if (orderProducts.containsKey(product)){
                     orderProducts.put(product, orderProducts.get(product) + 1);
                 } else {
-                    orderProducts.put(product, 0);
+                    orderProducts.put(product, 1);
                 }
             }
             Order order = new Order(orderProducts);
