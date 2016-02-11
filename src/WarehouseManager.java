@@ -2,14 +2,12 @@
  * Created by Zopo on 11.02.2016.
  */
 public class WarehouseManager {
-	Simulation _simulation;
-	
-    public Warehouse getClosestWarehouse(Coordinate curLocation, ProductType product, int amount){
+    public static Warehouse getClosestWarehouse(Coordinate curLocation, ProductType product, int amount){
     	Warehouse bestWarehouse = null;
     	int shortestDistance = Integer.MAX_VALUE;
     	int highestAmount = 0;
     	
-    	for (Warehouse warehouse : _simulation._warehouses) {
+    	for (Warehouse warehouse : Simulation.getInstance()._warehouses) {
     		int amountInWarehouse = warehouse._stock.get(product);
     		if (amountInWarehouse >= highestAmount) {
     			int distanceToWarehouse = Utils.getDistance(curLocation, warehouse._location);
