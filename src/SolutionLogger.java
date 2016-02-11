@@ -11,6 +11,11 @@ public class SolutionLogger {
     public static void main(String[] args) throws IOException {
         String filename = "busy_day.in";
         Simulation sim = parseFile(new File(filename));
+        System.out.println("Dronecount: " + sim._drones.size());
+        System.out.println("Productcount: " + sim._products.size());
+        System.out.println("Warehousecount: " + sim._warehouses.size());
+        System.out.println("Ordercount: " + sim._orders.size());
+
         sim.run();
     }
 
@@ -84,7 +89,9 @@ public class SolutionLogger {
                     orderProducts.put(product, 0);
                 }
             }
-            sim._orders.add(new Order(orderProducts));
+            Order order = new Order(orderProducts);
+            order._destination = orderDestination;
+            sim._orders.add(order);
         }
 
         return sim;
