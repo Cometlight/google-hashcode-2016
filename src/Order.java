@@ -6,9 +6,9 @@ import java.util.List;
 public class Order {
     Coordinate _destination;
     OrderStatus _status;
-    List<Delivery> _deliveries;
+    List<Delivery> _deliveries;	// can contain multiple same deliveries, indicating how many of them are needed
 
-    public Order(List<ProductType> products){
+    public Order(List<ProductType> products){	// can contain several same products, indicating how many of them are ordered
     }
 
     public enum OrderStatus{
