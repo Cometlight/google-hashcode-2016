@@ -10,7 +10,7 @@ public class Drone {
 	int _id;
     Coordinate _curLocation;
     int _maxWeight;
-    HashMap<ProductType, Integer /* amount */> _productStorage;
+    HashMap<ProductType, Integer /* amount */> _productStorage = new HashMap<>();
     Simulation _simulation; // needed to inform about actions taken, e.g. "load"
     List<Delivery> _deliveries = new LinkedList<>();	// FIFO
     int _remainingBusyTime = 0;
@@ -43,7 +43,8 @@ public class Drone {
         if (!containsNeededProductForCurrentDelivery()) {
         	// We need to fly and load at the warehouse
         	load(curDelivery._assignedWarehouse, curDelivery._product, curDelivery._amount);
-        	_productStorage.put(curDelivery._product, _productStorage.get(curDelivery._product) + curDelivery._amount);
+        	int curAmountOfProduct = _productStorage.get(curDelivery._product) == null ? 0 : _productStorage.get(curDelivery._product);
+        	_productStorage.put(curDelivery._product, curAmountOfProduct + curDelivery._amount);
         	int distance = Utils.getDistance(_curLocation, curDelivery._assignedWarehouse._location);
         	// distance == time to fly + loading command
         	_remainingBusyTime = distance + 1;
@@ -60,7 +61,8 @@ public class Drone {
         		}
         		_deliveries.add(newDelivery);
         		load(newDelivery._assignedWarehouse, newDelivery._product, newDelivery._amount);
-        		_productStorage.put(curDelivery._product, _productStorage.get(curDelivery._product) + curDelivery._amount);
+        		int curAmountOfProduct = _productStorage.get(curDelivery._product) == null ? 0 : _productStorage.get(curDelivery._product);
+        		_productStorage.put(curDelivery._product, curAmountOfProduct + curDelivery._amount);
         		// We know we are already at the correct position, so no need to fly
         		_remainingBusyTime = 1;	// time to load
         		return;
@@ -99,13 +101,16 @@ public class Drone {
     
     private void wait(int turns) {
     	System.out.println(_id  + " W " + turns);
+    	Simulation.getInstance()._nrOfDroneCommands++;
     }
     
     private void load(Warehouse warehouse, ProductType product, int amount) {
     	System.out.println(_id + " L " + warehouse._id + " " + product._id + " " + amount);
+    	Simulation.getInstance()._nrOfDroneCommands++;
     }
     
     private void deliver(Delivery delivery) {
     	System.out.println(_id + " D " + delivery._order._id + " " + delivery._product._id + " " + delivery._amount);
+    	Simulation.getInstance()._nrOfDroneCommands++;
     }
 }

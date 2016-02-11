@@ -35,12 +35,11 @@ public class Simulation {
     }
 
     public void run(){
-    	if (_curTime <= _maxTime) {
+    	while (_curTime <= _maxTime) {
 	    	performTimestep();
-    	} else {
-    		// time is up, the simulation has finished
-    		System.out.println("Nr. of commands: " + _nrOfDroneCommands);
     	}
+		// time is up, the simulation has finished
+		System.out.println("Nr. of commands: " + _nrOfDroneCommands);
     }
 
     public Delivery getNextDeliveryFromWarehouse(Drone drone, Warehouse warehouse){
