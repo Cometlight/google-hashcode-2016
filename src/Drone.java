@@ -16,6 +16,12 @@ public class Drone {
     }
 
     public int getCurrentWeight() {
-        return 0; // TODO
+    	int weight = 0;
+    	
+    	for (ProductType product : _productStorage) {
+    		weight += product._weight;
+    	}
+    	
+        return weight;
     }
 }
