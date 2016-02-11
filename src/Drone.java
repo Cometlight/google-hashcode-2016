@@ -18,7 +18,6 @@ public class Drone {
 
     public void performTimestep(){
     	if (!_active) {
-    		wait(1);
     		return;
     	}
     	
@@ -43,6 +42,7 @@ public class Drone {
         if (!containsNeededProductForCurrentDelivery()) {
         	// We need to fly and load at the warehouse
         	load(curDelivery._assignedWarehouse, curDelivery._product, curDelivery._amount);
+        	_curLocation = curDelivery._assignedWarehouse._location;
         	int curAmountOfProduct = _productStorage.get(curDelivery._product) == null ? 0 : _productStorage.get(curDelivery._product);
         	_productStorage.put(curDelivery._product, curAmountOfProduct + curDelivery._amount);
         	int distance = Utils.getDistance(_curLocation, curDelivery._assignedWarehouse._location);
@@ -51,26 +51,25 @@ public class Drone {
         	return;
         }
         
-        if (!_curLocation.equals(curDelivery._assignedWarehouse._location)) {
+        if (_curLocation.equals(curDelivery._assignedWarehouse._location) && getCurrentWeight() < _maxWeight) {
         	// We just loaded the stuff needed for the current delivery, but let's see if we have some space left
-        	while (getCurrentWeight() < _maxWeight) {
-        		Delivery newDelivery = Simulation.getInstance().getNextDeliveryFromWarehouse(this, curDelivery._assignedWarehouse);
-        		if (newDelivery == null) {
-        			// no applicable delivery exists anymore at the moment
-        			break;
-        		}
-        		_deliveries.add(newDelivery);
-        		load(newDelivery._assignedWarehouse, newDelivery._product, newDelivery._amount);
-        		int curAmountOfProduct = _productStorage.get(curDelivery._product) == null ? 0 : _productStorage.get(curDelivery._product);
-        		_productStorage.put(curDelivery._product, curAmountOfProduct + curDelivery._amount);
-        		// We know we are already at the correct position, so no need to fly
-        		_remainingBusyTime = 1;	// time to load
-        		return;
-        	}
+    		Delivery newDelivery = Simulation.getInstance().getNextDeliveryFromWarehouse(this, curDelivery._assignedWarehouse);
+    		if (newDelivery != null) {
+    			// no applicable delivery exists anymore at the moment
+	    		_deliveries.add(newDelivery);
+	    		load(newDelivery._assignedWarehouse, newDelivery._product, newDelivery._amount);
+	    		int curAmountOfProduct = _productStorage.get(newDelivery._product) == null ? 0 : _productStorage.get(newDelivery._product);
+	    		_productStorage.put(newDelivery._product, curAmountOfProduct + newDelivery._amount);
+	    		// We know we are already at the correct position, so no need to fly
+	    		_remainingBusyTime = 1;	// time to load
+	    		return;
+    		}
         }
         
         // We have all we need, let's deliver it to the customer
         deliver(curDelivery);
+        _curLocation = curDelivery._order._destination;
+        _deliveries.remove(0);
         int distance = Utils.getDistance(_curLocation, curDelivery._order._destination);
         // distance == time to fly + deliver command
         _remainingBusyTime = distance + 1;

@@ -13,7 +13,7 @@ public class Simulation {
     int _droneCapacity;
     List<Order> _orders;
     PriorityQueue<Delivery> _deliveries = new PriorityQueue<>();
-    int DELIVERY_LOOKUP_COUNT = 32;
+    int DELIVERY_LOOKUP_COUNT = 4096;
     List<Warehouse> _warehouses;
     List<ProductType> _products;
     WarehouseManager _warehouseManager;
@@ -56,14 +56,15 @@ public class Simulation {
             int totalDistance = 0;
 
             //get the distance from the warehouse to the destination
-            totalDistance += Utils.getDistance(warehouse._location, checkedDelivery._order._destination);
+            totalDistance += Utils.getDistance(drone._deliveries.get(drone._deliveries.size()-1)._order._destination, checkedDelivery._order._destination);
 
             //replace the current shortest delivery if the distance is shorter and the current warehouse has the product in stock
             int productStock = warehouse._stock.get(checkedDelivery._product);
-            if (totalDistance < shortestDeliveryDistance && productStock >= checkedDelivery._amount){
+            if (totalDistance < shortestDeliveryDistance && productStock >= checkedDelivery._amount && checkedDelivery.getWeight() + drone.getCurrentWeight() <= drone._maxWeight){
                 shortestDeliveryDistance = totalDistance;
                 shortestDelivery = checkedDelivery;
             }
+            
         }
 
         //Abort when there are no deliveries found
@@ -99,7 +100,7 @@ public class Simulation {
             totalDistance += Utils.getDistance(closestWarehouse._location, checkedDelivery._order._destination);
 
             //replace the current shortest delivery if the distance is shorter
-            if (totalDistance < shortestDeliveryDistance){
+            if (totalDistance < shortestDeliveryDistance  && checkedDelivery.getWeight() + drone.getCurrentWeight() <= drone._maxWeight){
                 shortestDeliveryDistance = totalDistance;
                 shortestDelivery = checkedDelivery;
                 shortestDeliveryWarehouse = closestWarehouse;
@@ -110,7 +111,7 @@ public class Simulation {
         if (shortestDelivery == null){
             return null;
         }
-
+        
         confirmDelivery(shortestDeliveryWarehouse, shortestDelivery);
 
         return shortestDelivery;

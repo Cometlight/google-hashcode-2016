@@ -9,7 +9,7 @@ import java.util.*;
  */
 public class SolutionLogger {
     public static void main(String[] args) throws IOException {
-        String filename = "busy_day.in";
+        String filename = "redundancy.in";
         Simulation sim = parseFile(new File(filename));
         System.out.println("Dronecount: " + sim._drones.size());
         System.out.println("Productcount: " + sim._products.size());

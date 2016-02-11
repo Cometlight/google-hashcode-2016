@@ -27,13 +27,15 @@ public class Order {
     			int weightOfBiggestDeliveryPossible = maxNrPossibleOfProduct * entry.getKey()._weight;
     			int totalWeightRemaining = totalWeight;
     			while (totalWeightRemaining > weightOfBiggestDeliveryPossible) {
-    				Delivery newDelivery = new Delivery(this, entry.getKey(), entry.getValue());
+    				Delivery newDelivery = new Delivery(this, entry.getKey(), maxNrPossibleOfProduct);
     				Simulation.getInstance()._deliveries.add(newDelivery);
     				_deliveries.add(newDelivery);
     				totalWeightRemaining -= weightOfBiggestDeliveryPossible;
     			}
     			int amountOfFinalDelivery = totalWeightRemaining / entry.getKey()._weight;
-    			_deliveries.add(new Delivery(this, entry.getKey(), amountOfFinalDelivery));
+    			Delivery newDelivery = new Delivery(this, entry.getKey(), amountOfFinalDelivery);
+    			_deliveries.add(newDelivery);
+    			Simulation.getInstance()._deliveries.add(newDelivery);
     		}
     	}
     }

@@ -9,7 +9,8 @@ public class WarehouseManager {
     	
     	for (Warehouse warehouse : Simulation.getInstance()._warehouses) {
     		int amountInWarehouse = warehouse._stock.get(product);
-    		if (amountInWarehouse >= highestAmount) {
+//    		if (amountInWarehouse >= highestAmount) {
+    		if (amountInWarehouse >= amount) {	// FIXME
     			int distanceToWarehouse = Utils.getDistance(curLocation, warehouse._location);
     			if (distanceToWarehouse < shortestDistance) {
     				bestWarehouse = warehouse;
