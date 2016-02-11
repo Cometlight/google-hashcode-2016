@@ -18,14 +18,18 @@ public class Order {
     		int totalWeight = entry.getValue() * entry.getKey()._weight;
     		if (totalWeight <= capacity) {
     			// We don't have to split it into multiple deliveries
-    			_deliveries.add(new Delivery(this, entry.getKey(), entry.getValue()));
+    			Delivery newDelivery = new Delivery(this, entry.getKey(), entry.getValue());
+    			_deliveries.add(newDelivery);
+    			Simulation.getInstance()._deliveries.add(newDelivery);
     		} else {
     			// Split it
     			int maxNrPossibleOfProduct = capacity / entry.getKey()._weight;
     			int weightOfBiggestDeliveryPossible = maxNrPossibleOfProduct * entry.getKey()._weight;
     			int totalWeightRemaining = totalWeight;
     			while (totalWeightRemaining > weightOfBiggestDeliveryPossible) {
-    				_deliveries.add(new Delivery(this, entry.getKey(), entry.getValue()));
+    				Delivery newDelivery = new Delivery(this, entry.getKey(), entry.getValue());
+    				Simulation.getInstance()._deliveries.add(newDelivery);
+    				_deliveries.add(newDelivery);
     				totalWeightRemaining -= weightOfBiggestDeliveryPossible;
     			}
     			int amountOfFinalDelivery = totalWeightRemaining / entry.getKey()._weight;
