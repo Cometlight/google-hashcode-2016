@@ -19,7 +19,7 @@ public class Simulation {
     WarehouseManager _warehouseManager;
     int _nrOfDroneCommands = 0;
 
-    int _curTime = 1;
+    int _curTime = 0;
     int _maxTime;
 
     int _width;
@@ -28,6 +28,7 @@ public class Simulation {
     int _commandCount;
 
     public void performTimestep() {
+        _curTime++;
     	for(Drone drone : _drones) {
     		drone.performTimestep();
     	}
@@ -41,8 +42,42 @@ public class Simulation {
     		System.out.println("Nr. of commands: " + _nrOfDroneCommands);
     	}
     }
-    
-	public Delivery getNextDelivery(Coordinate curLocation){
+
+    public Delivery getNextDeliveryFromWarehouse(Drone drone, Warehouse warehouse){
+        int deliveryCount = Math.min(DELIVERY_LOOKUP_COUNT, _deliveries.size());
+
+        //choose the shortest delivery
+        Delivery shortestDelivery = null;
+        int shortestDeliveryDistance = Integer.MAX_VALUE;
+
+        Iterator deliveryIterator = _deliveries.iterator();
+        for (int i = 0; i < deliveryCount; i++){
+            //get the next delivery to check
+            Delivery checkedDelivery = (Delivery) deliveryIterator.next();
+            int totalDistance = 0;
+
+            //get the distance from the warehouse to the destination
+            totalDistance += Utils.getDistance(warehouse._location, checkedDelivery._order._destination);
+
+            //replace the current shortest delivery if the distance is shorter and the current warehouse has the product in stock
+            int productStock = warehouse._stock.get(checkedDelivery._product);
+            if (totalDistance < shortestDeliveryDistance && productStock >= checkedDelivery._amount){
+                shortestDeliveryDistance = totalDistance;
+                shortestDelivery = checkedDelivery;
+            }
+        }
+
+        //Abort when there are no deliveries found
+        if (shortestDelivery == null){
+            return null;
+        }
+
+        confirmDelivery(warehouse, shortestDelivery);
+
+        return shortestDelivery;
+    }
+
+	public Delivery getNextDelivery(Drone drone){
         int deliveryCount = Math.min(DELIVERY_LOOKUP_COUNT, _deliveries.size());
 
         //choose the shortest delivery
@@ -56,10 +91,10 @@ public class Simulation {
             int totalDistance = 0;
 
             //get the closest warehouse
-            Warehouse closestWarehouse = _warehouseManager.getClosestWarehouse(curLocation, checkedDelivery._product, checkedDelivery._amount);
+            Warehouse closestWarehouse = _warehouseManager.getClosestWarehouse(drone._curLocation, checkedDelivery._product, checkedDelivery._amount);
 
             //get the distance to the closest warehouse
-            totalDistance += Utils.getDistance(curLocation, closestWarehouse._location);
+            totalDistance += Utils.getDistance(drone._curLocation, closestWarehouse._location);
 
             //get the distance from the warehouse to the destination
             totalDistance += Utils.getDistance(closestWarehouse._location, checkedDelivery._order._destination);
@@ -71,33 +106,40 @@ public class Simulation {
                 shortestDeliveryWarehouse = closestWarehouse;
             }
         }
-
+        
         //Abort when there are no deliveries found
         if (shortestDelivery == null){
             return null;
         }
 
+        confirmDelivery(shortestDeliveryWarehouse, shortestDelivery);
+
+        return shortestDelivery;
+    }
+
+    private void confirmDelivery(Warehouse warehouse, Delivery delivery){
+
         //Put closest warehouse to the delivery
-        shortestDelivery._assignedWarehouse = shortestDeliveryWarehouse;
+        delivery._assignedWarehouse = warehouse;
 
         //Reserve the products in the warehouse
-        int oldStock = shortestDeliveryWarehouse._stock.get(shortestDelivery._product);
-        shortestDeliveryWarehouse._stock.put(shortestDelivery._product, oldStock - shortestDelivery._amount);
+        int oldStock = warehouse._stock.get(delivery._product);
+        warehouse._stock.put(delivery._product, oldStock - delivery._amount);
 
         //Remove delivery from list of available deliveries
-        _deliveries.remove(shortestDelivery);
+        _deliveries.remove(delivery);
 
         //Refresh order status
-        Order order = shortestDelivery._order;
-        order._deliveries.remove(shortestDelivery);
+        Order order = delivery._order;
+        order._deliveries.remove(delivery);
         if (order._deliveries.isEmpty()){
             order._status = Order.OrderStatus.DONE;
         } else {
             order._status = Order.OrderStatus.IN_PROGRESS;
         }
 
-        return shortestDelivery;
     }
+
 
     public static Simulation getInstance(){
         if (_instance == null){
