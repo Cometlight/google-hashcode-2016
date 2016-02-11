@@ -7,10 +7,11 @@ import java.util.Set;
  */
 public class Simulation {
     List<Drone> _drones;
+    int _droneCapacity;
     List<Order> _orders;
     PriorityQueue<Delivery> _deliveries;
     List<Warehouse> _warehouses;
-    Set<ProductType> _products;
+    List<ProductType> _products;
     WarehouseManager _warehouseManager;
     int _nrOfDroneCommands = 0;
 

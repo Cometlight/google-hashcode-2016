@@ -2,10 +2,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Zopo on 11.02.2016.
@@ -28,6 +25,7 @@ public class SolutionLogger {
         int droneCount = Integer.parseInt(firstLine[2]);
         sim._maxTime = Integer.parseInt(firstLine[3]);
         int droneCapacity = Integer.parseInt(firstLine[4]);
+        sim._droneCapacity = droneCapacity;
 
         //Second Line - Product Count
         String secondLine = lines.remove(0);
@@ -35,7 +33,7 @@ public class SolutionLogger {
 
         //Third Line - Product weights
         String[] thirdLine = (lines.remove(0)).split(" ");
-        sim._products = new HashSet<>(productCount);
+        sim._products = new LinkedList<>();
         int id = 0;
         for (String singleItem : thirdLine){
             ProductType product = new ProductType();
@@ -58,8 +56,19 @@ public class SolutionLogger {
             warehouse._stock = new HashMap<>(productCount);
             String[] stockLine = lines.remove(0).split(" ");
             for (int j = 0; j < stockLine.length; j++){
-
+                ProductType product = sim._products.get(j);
+                warehouse._stock.put(product, Integer.parseInt(stockLine[j]));
             }
+        }
+
+        //Line X - Delivery Count
+        String xLine = lines.remove(0);
+        int deliveryCount = Integer.parseInt(xLine);
+
+        //Line X+1 to End - Delivery Details
+        sim._orders = new LinkedList<>();
+        for (int i = 0; i < deliveryCount; i++){
+            String[] locationLine = lines.remove(0).split(" ");
         }
 
         return sim;
