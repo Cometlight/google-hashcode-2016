@@ -1,4 +1,4 @@
-# super-duper-barnacle
+# Google Hashcode 2016
 
 Entry for [Google Hashcode 2016](https://hashcode.withgoogle.com/). This solution results in the following scores:
 
